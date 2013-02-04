@@ -8,7 +8,7 @@
 
 static int R, C;
 
-void
+static void
 end(int x)
 {
     endwin();
@@ -27,14 +27,15 @@ get_tile_color(Point p, Plane plane)
     return plane[getcoord(p)];
 }
 
-void
+/* Toggle the tile color at p. */
+static void
 flip(Point p, Plane plane)
 {
     int coord = getcoord(p);
     plane[coord] = !plane[coord];
 }
 
-void
+static void
 rotate_ant(Ant *ant, int direc)
 {
     if (direc == LEFT) {
@@ -50,7 +51,7 @@ rotate_ant(Ant *ant, int direc)
     }
 }
 
-void
+static void
 advance(Ant *ant)
 {
     switch (ant->direc) {
@@ -69,7 +70,8 @@ advance(Ant *ant)
     }
 }
 
-void
+/* Protect the border. */
+static void
 guard(Ant *ant)
 {
     if (ant->p.x >= R || ant->p.x < 0 || ant->p.y >= C || ant->p.y < 0) {
@@ -78,7 +80,7 @@ guard(Ant *ant)
     }
 }
 
-int
+static int
 step(Ant *ant, Plane plane)
 {
     int tile_color = get_tile_color(ant->p, plane);

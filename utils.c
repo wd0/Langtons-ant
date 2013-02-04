@@ -10,6 +10,7 @@ die(char *e)
     exit(1);
 }
 
+/* Show a final error message and clean up curses before exiting. */
 void
 fail(char *e, ...)
 {
