@@ -72,7 +72,7 @@ advance(Ant *ant)
 void
 guard(Ant *ant)
 {
-    if (ant->p.x >= R || ant->p.y >= C) {
+    if (ant->p.x >= R || ant->p.x < 0 || ant->p.y >= C || ant->p.y < 0) {
         getch();
         end(0);
     }

@@ -6,7 +6,7 @@ Plane
 makeplane(int x, int y)
 {
     int size = x * y;
-    Plane plane = emalloc(size * sizeof *plane);
+    Plane plane = emalloc((size *= sizeof *plane));
     int i;
 
     for (i = 0; i < size; ++i)
@@ -19,6 +19,11 @@ Ant *
 makeant(int x, int y, int direc)
 {
     Ant *ant = emalloc(sizeof *ant);
+
+    if (x < 0)
+        x = 0;
+    if (y < 0)
+        y = 0;
 
     ant->p.x = x;
     ant->p.y = y;
