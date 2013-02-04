@@ -6,7 +6,7 @@
 #include "types.h"
 #include "utils.h"
 
-enum { R = 1000, C = 1000 };
+static int R, C;
 
 void
 end(int x)
@@ -70,11 +70,12 @@ advance(Ant *ant)
 }
 
 void
-guard(Ant *ant, Plane plane)
+guard(Ant *ant)
 {
-    if (0) /* It has not been proven
-              that all starting positions bridge. */
-        exit(0); /* Pray you've not chosen one of them */
+    if (ant->p.x >= R || ant->p.y >= C) {
+        getch();
+        end(0);
+    }
 }
 
 int
@@ -90,8 +91,8 @@ step(Ant *ant, Plane plane)
         printw("OH GOD WHAT COLOR IS THIS");
 
     flip(ant->p, plane);
-    guard(ant, plane);
     advance(ant);
+    guard(ant);
 
     return 1;
 }
@@ -106,7 +107,7 @@ void
 draw(Point p, Plane plane)
 {
     movep(p);
-    attrset(COLOR_PAIR(get_tile_color(p, plane)));
+    attrset(COLOR_PAIR(get_tile_color(p, plane) ));
     printw("#");
     refresh();
 }
@@ -114,19 +115,30 @@ draw(Point p, Plane plane)
 
 int main(int argc, char **argv)
 {
-    Ant *ant = makeant(100, 40, UP);
+    Ant *ant;
     Plane plane;
 
-    signal(SIGINT, end);
-
     initscr();
+    signal(SIGINT, end);
+    getmaxyx(stdscr, C, R);
+
+    if (argc == 3) {
+        int x = atoi(argv[1]);
+        int y = atoi(argv[2]);
+
+        if (x < 0 || x >= R || y < 0 || y >= C)
+            fail("Term size (%d, %d) inadequate to start at `(%d, %d)'.\n", R, C, x, y);
+
+        ant = makeant(x, y, UP);
+    } else {
+        ant = makeant(R/2, C/2, UP);
+    }
+
     if (has_colors()) {
         start_color();
-        init_pair(1, COLOR_RED, COLOR_BLACK);
-        init_pair(2, COLOR_BLACK, COLOR_BLACK);
+        init_pair(1, COLOR_BLACK, COLOR_BLACK);
     } else {
-        warn("Couldn't start_color(). Check if your term has_colors().");
-        return 1;
+        fail("Couldn't start_color(). Check if your term has_colors().\n");
     }
 
     plane = makeplane(R, C);

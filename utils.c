@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <curses.h>
+#include <stdarg.h>
 
 void
 die(char *e)
@@ -9,10 +11,28 @@ die(char *e)
 }
 
 void
-warn(char *w)
+fail(char *e, ...)
 {
-    fprintf(stderr, "%s", w);
+    va_list ap;
+
+    va_start(ap, e);
+    vfprintf(stderr, e, ap);
+    va_end(ap);
+
+    endwin();
+    exit(1);
 }
+
+void
+warn(char *w, ...)
+{
+    va_list ap;
+
+    va_start(ap, w);
+    vfprintf(stderr, w, ap);
+    va_end(ap);
+}
+
 
 void *
 emalloc(int size)

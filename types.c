@@ -10,7 +10,7 @@ makeplane(int x, int y)
     int i;
 
     for (i = 0; i < size; ++i)
-        plane[i] = 0;
+        plane[i] = TILE_BLACK;
 
     return plane;
 }
