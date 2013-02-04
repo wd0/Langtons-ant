@@ -1,0 +1,3 @@
+A curses implementation of Langton's ant.
+
+Requires ncurses; just run make to build.
