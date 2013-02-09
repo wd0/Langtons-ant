@@ -16,7 +16,7 @@ makeplane(int x, int y)
 }
 
 Ant *
-makeant(int x, int y, int direc)
+makeant(int x, int y, Direction direc)
 {
     Ant *ant = emalloc(sizeof *ant);
 
